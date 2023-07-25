@@ -15,13 +15,11 @@ import SignIn from 'views/auth/SignIn';
 // Icon Imports
 import {
   MdAppSettingsAlt,
-  MdDashboardCustomize,
   MdEditCalendar,
   MdHome,
   MdLiveTv,
   MdLock,
   MdOutlineMessage,
-  MdPerson,
   MdPersonAdd,
   MdQrCode2,
 } from 'react-icons/md';

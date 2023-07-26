@@ -1,20 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Dropdown from 'components/dropdown';
 import { FiAlignJustify } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import navbarimage from 'assets/img/layout/Navbar.png';
 import { BsArrowBarUp } from 'react-icons/bs';
-import { FiSearch } from 'react-icons/fi';
 import { RiMoonFill, RiSunFill } from 'react-icons/ri';
 import {
   IoMdNotificationsOutline,
   IoMdInformationCircleOutline,
 } from 'react-icons/io';
-import avatar from 'assets/img/avatars/avatar4.png';
+import avatar from 'assets/img/avatars/avatar12.jpg';
 
 const Navbar = (props) => {
-  const { onOpenSidenav, brandText } = props;
+  const { onOpenSidenav, brandText, name } = props;
   const [darkmode, setDarkmode] = React.useState(false);
+
+  useEffect(() => {
+    const darkmode_memory = localStorage.getItem('darkmode');
+    if (darkmode_memory === 'true') {
+      document.body.classList.add('dark');
+      setDarkmode(true);
+    } else {
+      document.body.classList.remove('dark');
+      setDarkmode(false);
+    }
+  }, []);
 
   return (
     <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
@@ -56,7 +66,7 @@ const Navbar = (props) => {
           <FiAlignJustify className="h-5 w-5" />
         </span>
         {/* start Notification */}
-        <Dropdown
+        {/* <Dropdown
           button={
             <p className="cursor-pointer">
               <IoMdNotificationsOutline className="h-4 w-4 text-gray-600 dark:text-white" />
@@ -104,7 +114,7 @@ const Navbar = (props) => {
             </div>
           }
           classNames={'py-2 top-4 -left-[230px] md:-left-[440px] w-max'}
-        />
+        /> */}
         {/* start Horizon PRO */}
         <Dropdown
           button={
@@ -153,9 +163,11 @@ const Navbar = (props) => {
           onClick={() => {
             if (darkmode) {
               document.body.classList.remove('dark');
+              localStorage.setItem('darkmode', 'false');
               setDarkmode(false);
             } else {
               document.body.classList.add('dark');
+              localStorage.setItem('darkmode', 'true');
               setDarkmode(true);
             }
           }}
@@ -180,7 +192,7 @@ const Navbar = (props) => {
               <div className="p-4">
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-bold text-navy-700 dark:text-white">
-                    👋 Hey, Adela
+                    👋 Hey, {name}
                   </p>{' '}
                 </div>
               </div>
@@ -191,11 +203,16 @@ const Navbar = (props) => {
                   href=" "
                   className="text-sm text-gray-800 dark:text-white hover:dark:text-white"
                 >
-                  Profile Settings
+                  Configurações da conta
                 </a>
                 <a
                   href=" "
                   className="mt-3 text-sm font-medium text-red-500 hover:text-red-500"
+                  onClick={(e) => {
+                    localStorage.setItem('AUTH_TOKEN', '');
+                    localStorage.setItem('USER_DATA', '');
+                    window.location.reload();
+                  }}
                 >
                   Log Out
                 </a>

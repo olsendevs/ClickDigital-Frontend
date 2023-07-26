@@ -9,6 +9,7 @@ export default function Admin(props) {
   const { ...rest } = props;
   const location = useLocation();
   const [open, setOpen] = React.useState(true);
+  const [name, setName] = React.useState('');
   const [currentRoute, setCurrentRoute] = React.useState('Main Dashboard');
 
   React.useEffect(() => {
@@ -19,6 +20,11 @@ export default function Admin(props) {
   React.useEffect(() => {
     getActiveRoute(routes);
   }, [location.pathname]);
+
+  React.useEffect(() => {
+    const userInfo = localStorage.getItem('USER_DATA');
+    userInfo != '' ? setName(JSON.parse(userInfo).name) : setName('');
+  }, []);
 
   const getActiveRoute = (routes) => {
     let activeRoute = 'Main Dashboard';
@@ -69,6 +75,7 @@ export default function Admin(props) {
           {/* Routes */}
           <div className="h-full">
             <Navbar
+              name={name}
               onOpenSidenav={() => setOpen(true)}
               logoText={'ClickDigital'}
               brandText={currentRoute}

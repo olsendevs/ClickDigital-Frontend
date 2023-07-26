@@ -26,7 +26,7 @@ import {
 
 const routes = [
   {
-    name: 'Main Dashboard',
+    name: 'Home',
     layout: '/admin',
     path: 'default',
     icon: <MdHome className="h-6 w-6" />,

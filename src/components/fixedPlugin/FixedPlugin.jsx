@@ -25,9 +25,11 @@ export default function FixedPlugin(props) {
       onClick={() => {
         if (darkmode) {
           document.body.classList.remove('dark');
+          localStorage.setItem('darkmode', 'false');
           setDarkmode(false);
         } else {
           document.body.classList.add('dark');
+          localStorage.setItem('darkmode', 'true');
           setDarkmode(true);
         }
       }}

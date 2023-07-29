@@ -1,11 +1,44 @@
+import api from 'api/api';
+import { useEffect, useState } from 'react';
+import CheckTable from './components/CheckTable';
 const ServicesCrud = () => {
-  return (
-    <div class="flex flex-col gap-8 text-left">
-      <h1 class="text-inherit block font-sans text-5xl font-semibold leading-tight tracking-normal text-navy-800 antialiased dark:text-white">
-        Serviços
-      </h1>
-    </div>
-  );
+  const [tableData, setTableData] = useState([]);
+  const columnsDataServices = [
+    {
+      Header: 'Id',
+      accessor: 'id',
+    },
+    {
+      Header: 'Serviço | Provedor',
+      accessor: 'name',
+    },
+    {
+      Header: 'Custo',
+      accessor: 'cost',
+    },
+    {
+      Header: 'Ação',
+      accessor: 'action',
+    },
+  ];
+  useEffect(() => {
+    api
+      .get('service')
+      .then((response) => {
+        const result = response.data.map((item) => {
+          return {
+            id: item._id,
+            name: item.name,
+            cost: parseFloat(item.cost.$numberDecimal).toFixed(2),
+          };
+        });
+        setTableData(result);
+      })
+      .catch((error) => {
+        console.error('Erro na requisição GET:', error);
+      });
+  }, []);
+  return <CheckTable columnsData={columnsDataServices} tableData={tableData} />;
 };
 
 export default ServicesCrud;

@@ -15,20 +15,21 @@ import DailyTraffic from 'views/admin/default/components/DailyTraffic';
 import TaskCard from 'views/admin/default/components/TaskCard';
 import tableDataCheck from './variables/tableDataCheck.json';
 import tableDataComplex from './variables/tableDataComplex.json';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import api from 'api/api';
 
 const Dashboard = () => {
-  try {
+  useEffect(() => {
     api
-      .get('customer')
+      .get('health-check/auth')
       .then((response) => {
-        console.log('ok');
+        console.log(response.data);
       })
       .catch((error) => {
         console.error('Erro na requisição GET:', error);
       });
-  } catch (e) {}
+  }, []);
+
   return (
     <div>
       {/* Card widget */}

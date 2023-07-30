@@ -58,15 +58,15 @@ const Widget = ({ icon, status, handlerUpdateStatus }) => {
           <h4 className="text-xl font-bold text-navy-700 dark:text-white">
             Desconectado
           </h4>
-          <p className="font-dm text-sm font-medium text-gray-600">
-            Você não possui nenhuma sessão ativa
-          </p>
           {qrCodeImage ? (
             <div>
+              <p className="font-dm text-sm font-medium text-gray-600">
+                Escanei o QR-Code para ativar sua sessão
+              </p>
               <img
                 src={qrCodeImage}
                 alt="QR Code"
-                className="mt-5 h-auto w-auto"
+                className="mt-5 ml-1 h-auto w-auto"
               />
 
               <button
@@ -77,12 +77,17 @@ const Widget = ({ icon, status, handlerUpdateStatus }) => {
               </button>
             </div>
           ) : (
-            <button
-              onClick={() => generateQrCode()}
-              className="mt-5 rounded-xl bg-green-500 px-5 py-3 text-base font-medium text-white transition duration-200 hover:bg-green-600 active:bg-green-700 dark:bg-green-400 dark:text-white dark:hover:bg-green-300 dark:active:bg-green-200"
-            >
-              Conectar
-            </button>
+            <div>
+              <p className="font-dm text-sm font-medium text-gray-600">
+                Você não possui nenhuma sessão ativa
+              </p>
+              <button
+                onClick={() => generateQrCode()}
+                className="mt-5 rounded-xl bg-green-500 px-5 py-3 text-base font-medium text-white transition duration-200 hover:bg-green-600 active:bg-green-700 dark:bg-green-400 dark:text-white dark:hover:bg-green-300 dark:active:bg-green-200"
+              >
+                Conectar
+              </button>
+            </div>
           )}
         </div>
       ) : (

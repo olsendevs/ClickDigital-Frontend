@@ -1,0 +1,10 @@
+bugs:
+
+- Corrigir input de data e select no darkmode
+- Corrigir datapicker com dois calendarios
+
+melhorias:
+
+- Refatorar Customers em componentes 
+- Remover uso do reload() para atualizar os componentes (usar handlers)
+- Inserir um validador de autenticação no backend para logar no whatsapp

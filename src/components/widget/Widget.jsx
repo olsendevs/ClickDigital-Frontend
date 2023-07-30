@@ -1,4 +1,4 @@
-import Card from "components/card";
+import Card from 'components/card';
 
 const Widget = ({ icon, title, subtitle }) => {
   return (

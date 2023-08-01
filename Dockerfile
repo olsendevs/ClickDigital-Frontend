@@ -22,8 +22,18 @@ FROM nginx:latest
 # Copiar os arquivos de build do React do estágio anterior para o diretório de publicação padrão do Nginx
 COPY --from=build-stage /app/build /usr/share/nginx/html
 
-# Expor a porta 80 do contêiner
+# Instalar o Certbot e os utilitários de gerenciamento de certificados SSL
+RUN apt-get update && \
+    apt-get install -y certbot python3-certbot-nginx && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Adicionar configuração do Nginx para SSL
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Expor as portas 80 (HTTP) e 443 (HTTPS) do contêiner
 EXPOSE 80
+EXPOSE 443
 
 # O comando de inicialização do Nginx será executado automaticamente ao iniciar o contêiner
 CMD ["nginx", "-g", "daemon off;"]

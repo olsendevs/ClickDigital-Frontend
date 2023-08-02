@@ -14,7 +14,6 @@ services:
       - '3001:3001'
     depends_on:
       - 'mongo'
-      - 'clickdigital-front'
     env_file:
       - .env
   mongo:

@@ -6,3 +6,18 @@ services:
       dockerfile: Dockerfile
     ports:
       - '3000:3000'
+  clickdigital-api:
+    build:
+      context: ../ClickDigital/.
+      dockerfile: Dockerfile
+    ports:
+      - '3001:3001'
+    depends_on:
+      - 'mongo'
+      - 'clickdigital-front'
+    env_file:
+      - .env
+  mongo:
+    image: mongo
+    ports:
+      - '27017:27017'

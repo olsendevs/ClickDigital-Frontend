@@ -1,7 +1,7 @@
 import api from 'api/api';
 import InputField from 'components/fields/InputField';
 import Toast from 'components/toast';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 function isValidEmail(email) {
@@ -15,6 +15,12 @@ export default function SignIn() {
   const [passwordState, setPasswordState] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem('AUTH_TOKEN');
+    if (token) {
+      window.location.href = '/admin/default';
+    }
+  });
   const validateInputs = () => {
     let result = true;
     setPasswordState('error');

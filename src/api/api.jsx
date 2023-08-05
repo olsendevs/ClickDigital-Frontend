@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://ec2-18-116-28-156.us-east-2.compute.amazonaws.com:3000',
+  baseURL: 'https://nest.ckdigital.xyz',
   //baseURL: 'http://127.0.0.1:3001',
 });
 

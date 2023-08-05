@@ -4,6 +4,7 @@ import Navbar from 'components/navbar';
 import Sidebar from 'components/sidebar';
 import Footer from 'components/footer/Footer';
 import routes from 'routes.js';
+import api from 'api/api';
 
 export default function Admin(props) {
   const { ...rest } = props;
@@ -24,6 +25,14 @@ export default function Admin(props) {
   React.useEffect(() => {
     const userInfo = localStorage.getItem('USER_DATA');
     userInfo != '' ? setName(JSON.parse(userInfo).name) : setName('');
+    api
+      .get('health-check/auth')
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        window.location.href = '/';
+      });
   }, []);
 
   const getActiveRoute = (routes) => {

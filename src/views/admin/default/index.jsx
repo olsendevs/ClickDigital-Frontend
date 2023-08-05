@@ -19,17 +19,6 @@ import { useEffect } from 'react';
 import api from 'api/api';
 
 const Dashboard = () => {
-  useEffect(() => {
-    api
-      .get('health-check/auth')
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error('Erro na requisição GET:', error);
-      });
-  }, []);
-
   return (
     <div>
       {/* Card widget */}

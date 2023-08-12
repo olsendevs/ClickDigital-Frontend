@@ -16,7 +16,8 @@ import Toast from 'components/toast';
 import Swal from 'sweetalert2';
 
 const CheckTable = (props) => {
-  const { columnsData, tableData } = props;
+  const { columnsData, tableData, totalPages, currentPage, onPageChange } =
+    props;
 
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
@@ -307,6 +308,23 @@ const CheckTable = (props) => {
             })}
           </tbody>
         </table>
+        {/* Pagination */}
+        <div className="flex justify-center mt-4 mb-4">
+          <button
+            onClick={() => onPageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="bg-gray-200 px-4 py-2 rounded-l-xl disabled:bg-gray-400"
+          >
+            Anterior
+          </button>
+          <button
+            onClick={() => onPageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="bg-gray-200 px-4 py-2 rounded-r-xl disabled:bg-gray-400"
+          >
+            Próximo
+          </button>
+        </div>
       </div>
     </Card>
   );

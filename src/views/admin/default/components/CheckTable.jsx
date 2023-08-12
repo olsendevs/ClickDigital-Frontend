@@ -1,14 +1,14 @@
-import React, { useMemo } from "react";
-import CardMenu from "components/card/CardMenu";
-import Checkbox from "components/checkbox";
-import Card from "components/card";
+import React, { useMemo } from 'react';
+import CardMenu from 'components/card/CardMenu';
+import Checkbox from 'components/checkbox';
+import Card from 'components/card';
 
 import {
   useGlobalFilter,
   usePagination,
   useSortBy,
   useTable,
-} from "react-table";
+} from 'react-table';
 
 const CheckTable = (props) => {
   const { columnsData, tableData } = props;
@@ -23,7 +23,7 @@ const CheckTable = (props) => {
     },
     useGlobalFilter,
     useSortBy,
-    usePagination
+    usePagination,
   );
 
   const {
@@ -37,13 +37,11 @@ const CheckTable = (props) => {
   initialState.pageSize = 11;
 
   return (
-    <Card extra={"w-full h-full sm:overflow-auto px-6"}>
-      <header className="relative flex items-center justify-between pt-4">
-        <div className="text-xl font-bold text-navy-700 dark:text-white">
-          Check Table
+    <Card extra={'w-full h-full mt-5 sm:overflow-auto px-6'}>
+      <header className="relative flex items-center justify-between pt-4 ">
+        <div className="text-xl text-center font-bold text-navy-700 dark:text-white">
+          Usuário expirando
         </div>
-
-        <CardMenu />
       </header>
 
       <div className="mt-8 overflow-x-scroll xl:overflow-x-hidden">
@@ -64,7 +62,7 @@ const CheckTable = (props) => {
                     key={index}
                   >
                     <div className="text-xs font-bold tracking-wide text-gray-600 lg:text-xs">
-                      {column.render("Header")}
+                      {column.render('Header')}
                     </div>
                   </th>
                 ))}
@@ -77,32 +75,47 @@ const CheckTable = (props) => {
               return (
                 <tr {...row.getRowProps()} key={index}>
                   {row.cells.map((cell, index) => {
-                    let data = "";
-                    if (cell.column.Header === "NAME") {
+                    let data = '';
+                    if (cell.column.Header === 'Nome') {
                       data = (
-                        <div className="flex items-center gap-2">
-                          <Checkbox />
-                          <p className="text-sm font-bold text-navy-700 dark:text-white">
-                            {cell.value[0]}
-                          </p>
-                        </div>
+                        <p className="text-sm font-bold text-navy-700 dark:text-white">
+                          {' '}
+                          {cell.value}{' '}
+                        </p>
                       );
-                    } else if (cell.column.Header === "PROGRESS") {
+                    } else if (cell.column.Header === 'Fatura') {
                       data = (
                         <div className="flex items-center">
                           <p className="text-sm font-bold text-navy-700 dark:text-white">
-                            {cell.value}%
+                            {cell.value === 'payed' ? (
+                              <div className="rounded-lg bg-green-500 px-2 py-1 text-xs font-bold uppercase text-white transition duration-200 dark:bg-green-400">
+                                Pago
+                              </div>
+                            ) : (
+                              <div className="rounded-lg bg-orange-500 px-2 py-1 text-xs font-bold uppercase text-white transition duration-200 dark:bg-orange-400">
+                                Pendente
+                              </div>
+                            )}
                           </p>
                         </div>
                       );
-                    } else if (cell.column.Header === "QUANTITY") {
+                    } else if (cell.column.Header === 'Data de expiração') {
                       data = (
-                        <p className="text-sm font-bold text-navy-700 dark:text-white">
-                          {" "}
-                          {cell.value}{" "}
-                        </p>
+                        <div className="flex items-center">
+                          <p className="text-sm font-bold text-navy-700 dark:text-white">
+                            {new Date(cell.value) >= new Date() ? (
+                              <div className="rounded-lg bg-green-500 px-2 py-1 text-xs font-bold uppercase text-white transition duration-200 dark:bg-green-400">
+                                {cell.value}
+                              </div>
+                            ) : (
+                              <div className="rounded-lg bg-red-500 px-2 py-1 text-xs font-bold uppercase text-white transition duration-200 dark:bg-orange-400">
+                                {cell.value}
+                              </div>
+                            )}
+                          </p>
+                        </div>
                       );
-                    } else if (cell.column.Header === "DATE") {
+                    } else if (cell.column.Header === 'WhatsApp') {
                       data = (
                         <p className="text-sm font-bold text-navy-700 dark:text-white">
                           {cell.value}

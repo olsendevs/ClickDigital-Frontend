@@ -16,7 +16,7 @@ const MessagesConfiguration = () => {
       .get('MessageConfigs')
       .then((response) => {
         const item = response.data;
-        console.log(response.data);
+
         const result = {
           _id: item._id,
           fiveDaysBefore: item.fiveDaysBefore,

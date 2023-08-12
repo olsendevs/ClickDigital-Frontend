@@ -1,102 +1,138 @@
-import MiniCalendar from 'components/calendar/MiniCalendar';
-import WeeklyRevenue from 'views/admin/default/components/WeeklyRevenue';
-import TotalSpent from 'views/admin/default/components/TotalSpent';
-import PieChartCard from 'views/admin/default/components/PieChartCard';
-import { IoMdHome } from 'react-icons/io';
-import { IoDocuments } from 'react-icons/io5';
-import { MdBarChart, MdDashboard } from 'react-icons/md';
-
-import { columnsDataCheck, columnsDataComplex } from './variables/columnsData';
+import {
+  MdArrowCircleUp,
+  MdAttachMoney,
+  MdListAlt,
+  MdMoneyOff,
+  MdOutlinePersonOff,
+  MdPerson,
+  MdPersonAdd,
+  MdSupervisedUserCircle,
+} from 'react-icons/md';
 
 import Widget from 'components/widget/Widget';
-import CheckTable from 'views/admin/default/components/CheckTable';
-import ComplexTable from 'views/admin/default/components/ComplexTable';
-import DailyTraffic from 'views/admin/default/components/DailyTraffic';
-import TaskCard from 'views/admin/default/components/TaskCard';
-import tableDataCheck from './variables/tableDataCheck.json';
-import tableDataComplex from './variables/tableDataComplex.json';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import api from 'api/api';
+import CheckTable from './components/CheckTable';
 
 const Dashboard = () => {
+  const [clientsData, setClientsData] = useState({
+    total: 0,
+    active: 0,
+    disabled: 0,
+  });
+  const [moneyData, setMoneyData] = useState({
+    profit: 0,
+    entry: 0,
+    expense: 0,
+  });
+  const [tableData, setTableData] = useState([]);
+  const columnsDataServices = [
+    {
+      Header: 'Nome',
+      accessor: 'name',
+    },
+    {
+      Header: 'Fatura',
+      accessor: 'invoice',
+    },
+    {
+      Header: 'Data de expiração',
+      accessor: 'validateDate',
+    },
+    {
+      Header: 'WhatsApp',
+      accessor: 'whatsapp',
+    },
+  ];
+
+  useEffect(() => {
+    let profit = 0;
+    let entry = 0;
+    let expense = 0;
+    api
+      .get('customer/home')
+      .then((response) => {
+        const result = response.data.customers.map((item) => {
+          return {
+            name: item.name,
+            invoice: item.invoice,
+            validateDate: new Date(item.validateDate).toLocaleDateString(),
+            whatsapp: item.whatsapp,
+          };
+        });
+        entry = response.data.customers.reduce(
+          (s, i) => (s += Number(i.planId.value['$numberDecimal'])),
+          0,
+        );
+        expense = response.data.customers.reduce(
+          (s, i) => (s += Number(i.serviceId.cost['$numberDecimal'])),
+          0,
+        );
+        profit = entry - expense;
+        setMoneyData({
+          profit: `R$ ${profit.toFixed(2)}`,
+          entry: `R$ ${entry.toFixed(2)}`,
+          expense: `R$ ${expense.toFixed(2)}`,
+        });
+        setClientsData({
+          total: response.data.totalCustomers,
+          active: response.data.totalActive,
+          disabled: response.data.totalDisabled,
+        });
+        setTableData(result);
+      })
+      .catch((error) => {
+        console.error('Erro na requisição GET:', error);
+      });
+  }, []);
+
   return (
     <div>
       {/* Card widget */}
-
-      <div className="mt-3 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-6">
+      <h1 className="mt-10 text-xl flex">
+        {' '}
+        <MdSupervisedUserCircle className="h-7 w-7" /> Clientes no Sistema
+      </h1>
+      <div className="mt-3 grid grid-cols-3 gap-5 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-3">
         <Widget
-          icon={<MdBarChart className="h-7 w-7" />}
-          title={'Earnings'}
-          subtitle={'$340.5'}
+          icon={<MdPerson className="h-7 w-7" />}
+          title={'Clientes Total'}
+          subtitle={clientsData.total}
         />
         <Widget
-          icon={<IoDocuments className="h-6 w-6" />}
-          title={'Spend this month'}
-          subtitle={'$642.39'}
+          icon={<MdPersonAdd className="h-6 w-6" />}
+          title={'Clientes Ativos'}
+          subtitle={clientsData.active}
         />
         <Widget
-          icon={<MdBarChart className="h-7 w-7" />}
-          title={'Sales'}
-          subtitle={'$574.34'}
-        />
-        <Widget
-          icon={<MdDashboard className="h-6 w-6" />}
-          title={'Your Balance'}
-          subtitle={'$1,000'}
-        />
-        <Widget
-          icon={<MdBarChart className="h-7 w-7" />}
-          title={'New Tasks'}
-          subtitle={'145'}
-        />
-        <Widget
-          icon={<IoMdHome className="h-6 w-6" />}
-          title={'Total Projects'}
-          subtitle={'$2433'}
+          icon={<MdOutlinePersonOff className="h-7 w-7" />}
+          title={'Clientes Esgotados'}
+          subtitle={clientsData.disabled}
         />
       </div>
-
-      {/* Charts */}
-
-      <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">
-        <TotalSpent />
-        <WeeklyRevenue />
-      </div>
-
-      {/* Tables & Charts */}
-
-      <div className="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-2">
-        {/* Check Table */}
-        <div>
-          <CheckTable
-            columnsData={columnsDataCheck}
-            tableData={tableDataCheck}
-          />
-        </div>
-
-        {/* Traffic chart & Pie Chart */}
-
-        <div className="grid grid-cols-1 gap-5 rounded-[20px] md:grid-cols-2">
-          <DailyTraffic />
-          <PieChartCard />
-        </div>
-
-        {/* Complex Table , Task & Calendar */}
-
-        <ComplexTable
-          columnsData={columnsDataComplex}
-          tableData={tableDataComplex}
+      {/* Card widget */}
+      <h1 className="mt-10 text-xl flex">
+        <MdListAlt className="h-7 w-7" />
+        Total Financeiro de Clientes
+      </h1>
+      <div className="mt-3 grid grid-cols-3 gap-5 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-3">
+        <Widget
+          icon={<MdAttachMoney className="h-7 w-7" />}
+          title={'Lucros'}
+          subtitle={moneyData.profit}
         />
-
-        {/* Task chart & Calendar */}
-
-        <div className="grid grid-cols-1 gap-5 rounded-[20px] md:grid-cols-2">
-          <TaskCard />
-          <div className="grid grid-cols-1 rounded-[20px]">
-            <MiniCalendar />
-          </div>
-        </div>
+        <Widget
+          icon={<MdArrowCircleUp className="h-6 w-6" />}
+          title={'Entrada'}
+          subtitle={moneyData.entry}
+        />
+        <Widget
+          icon={<MdMoneyOff className="h-7 w-7" />}
+          title={'Despesas'}
+          subtitle={moneyData.expense}
+        />
       </div>
+      <CheckTable columnsData={columnsDataServices} tableData={tableData} />
     </div>
   );
 };

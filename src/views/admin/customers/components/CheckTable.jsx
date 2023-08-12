@@ -7,7 +7,7 @@ import {
   useSortBy,
   useTable,
 } from 'react-table';
-import { MdAdd, MdDelete, MdEdit } from 'react-icons/md';
+import { MdAdd, MdDelete, MdEdit, MdOutlineRepeat } from 'react-icons/md';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { Modal, ModalBody, ModalContent, ModalOverlay } from '@chakra-ui/modal';
 import InputField from '../components/InputField';
@@ -18,6 +18,7 @@ import Datepicker from 'react-tailwindcss-datepicker';
 import SwitchField from './SwitchField';
 import TextField from './TextField';
 import dayjs from 'dayjs';
+import RenovationModal from './RenovationModal';
 
 const CheckTable = (props) => {
   const { columnsData, tableData, totalPages, currentPage, onPageChange } =
@@ -62,6 +63,7 @@ const CheckTable = (props) => {
   const [customerId, setCustomerId] = useState('');
   const [modalTitle, setModalTittle] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [openRenovationModal, setOpenRenovationModal] = useState(false);
 
   const handleCheckboxChange = (event, key) => {
     const { checked } = event.target;
@@ -222,10 +224,7 @@ const CheckTable = (props) => {
 
   const editCustomer = () => {
     setIsLoading(true);
-    console.log(customerValidateDate);
-    document.getElementById(
-      'customer.sendNotification.fiveDaysBefore',
-    ).checked = false;
+
     api
       .patch('customer/' + customerId, {
         name: customerName,
@@ -260,6 +259,7 @@ const CheckTable = (props) => {
         });
       });
   };
+
   const confirmDeleteCustomer = (id) => {
     Swal.fire({
       title: 'Você tem certeza?',
@@ -333,6 +333,19 @@ const CheckTable = (props) => {
         console.error('Erro na requisição GET:', error);
       });
   }, []);
+
+  const handleRenovationModal = (value) => {
+    setCustomerName(value.name);
+    setCustomerWhatsApp(value.whatsapp);
+    setCustomerService(value.serviceId._id);
+    setCustomerInvoice(value.invoice);
+    setCustomerValidateDate({
+      startDate: value.endDate,
+      endDate: value.endDate,
+    });
+    setCustomerId(value.id);
+    setOpenRenovationModal(true);
+  };
 
   return (
     <Card extra={'w-full h-full sm:overflow-auto px-6 mt-1'}>
@@ -542,6 +555,15 @@ const CheckTable = (props) => {
           </ModalBody>
         </ModalContent>
       </Modal>
+      <RenovationModal
+        id={customerId}
+        name={customerName}
+        whatsapp={customerWhatsApp}
+        service={customerServiceOptions}
+        serviceId={customerService}
+        open={openRenovationModal}
+        onClose={() => setOpenRenovationModal(false)}
+      />
       <div className="mt-8 overflow-x-scroll xl:overflow-x-hidden">
         <table
           {...getTableProps()}
@@ -660,6 +682,12 @@ const CheckTable = (props) => {
                             className="flex items-center justify-center rounded-xl bg-brand-500 p-1 text-2xl text-white transition duration-200 hover:cursor-pointer hover:bg-brand-600 active:bg-brand-700 dark:bg-brand-400 dark:text-white dark:hover:bg-brand-300 dark:active:bg-brand-200"
                           >
                             <MdEdit />
+                          </button>
+                          <button
+                            onClick={() => handleRenovationModal(row.original)}
+                            className="flex items-center justify-center rounded-xl bg-teal-500 p-1 text-2xl text-white transition duration-200 hover:cursor-pointer hover:bg-teal-600 active:bg-teal-700 dark:bg-teal-400 dark:text-white dark:hover:bg-teal-300 dark:active:bg-teal-200"
+                          >
+                            <MdOutlineRepeat />
                           </button>
                           <button
                             onClick={() => {

@@ -6,6 +6,7 @@ import { MdEdit } from 'react-icons/md';
 import TextField from './TextField';
 import api from 'api/api';
 import Toast from 'components/toast';
+import MessageTriggers from './MessageTriggers';
 
 const Widget = ({
   icon,
@@ -90,6 +91,7 @@ const Widget = ({
                   }
                 />
               </div>
+              <MessageTriggers />
               <div className="mt-10 flex justify-end gap-2">
                 <button
                   onClick={onClose}

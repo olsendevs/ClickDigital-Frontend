@@ -7,7 +7,13 @@ import {
   useSortBy,
   useTable,
 } from 'react-table';
-import { MdAdd, MdDelete, MdEdit, MdOutlineRepeat } from 'react-icons/md';
+import {
+  MdAdd,
+  MdDelete,
+  MdEdit,
+  MdMessage,
+  MdOutlineRepeat,
+} from 'react-icons/md';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { Modal, ModalBody, ModalContent, ModalOverlay } from '@chakra-ui/modal';
 import InputField from '../components/InputField';
@@ -19,6 +25,7 @@ import SwitchField from './SwitchField';
 import TextField from './TextField';
 import dayjs from 'dayjs';
 import RenovationModal from './RenovationModal';
+import SendMessageModal from './SendMessageModal';
 
 const CheckTable = (props) => {
   const { columnsData, tableData, totalPages, currentPage, onPageChange } =
@@ -64,6 +71,11 @@ const CheckTable = (props) => {
   const [modalTitle, setModalTittle] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [openRenovationModal, setOpenRenovationModal] = useState(false);
+  const [openSendMessageModal, setOpenSendMessageModal] = useState(false);
+
+  const updateParentState = (newValue) => {
+    setIsLoading(newValue);
+  };
 
   const handleCheckboxChange = (event, key) => {
     const { checked } = event.target;
@@ -347,6 +359,11 @@ const CheckTable = (props) => {
     setOpenRenovationModal(true);
   };
 
+  const handleSendMessageModal = (value) => {
+    setCustomerWhatsApp(value.whatsapp);
+    setOpenSendMessageModal(true);
+  };
+
   return (
     <Card extra={'w-full h-full sm:overflow-auto px-6 mt-1'}>
       <header className="relative flex items-center justify-between pt-4">
@@ -568,6 +585,12 @@ const CheckTable = (props) => {
         open={openRenovationModal}
         onClose={() => setOpenRenovationModal(false)}
       />
+      <SendMessageModal
+        whatsapp={customerWhatsApp}
+        open={openSendMessageModal}
+        onClose={() => setOpenSendMessageModal(false)}
+        isLoading={updateParentState}
+      />
       <div className="mt-8 overflow-x-scroll xl:overflow-x-hidden">
         <table
           {...getTableProps()}
@@ -692,6 +715,12 @@ const CheckTable = (props) => {
                             className="flex items-center justify-center rounded-xl bg-teal-500 p-1 text-2xl text-white transition duration-200 hover:cursor-pointer hover:bg-teal-600 active:bg-teal-700 dark:bg-teal-400 dark:text-white dark:hover:bg-teal-300 dark:active:bg-teal-200"
                           >
                             <MdOutlineRepeat />
+                          </button>
+                          <button
+                            onClick={() => handleSendMessageModal(row.original)}
+                            className="flex items-center justify-center rounded-xl bg-green-500 p-1 text-2xl text-white transition duration-200 hover:cursor-pointer hover:bg-gree-600 active:bg-green-700 dark:bg-green-400 dark:text-white dark:hover:bg-green-300 dark:active:bg-green-200"
+                          >
+                            <MdMessage />
                           </button>
                           <button
                             onClick={() => {

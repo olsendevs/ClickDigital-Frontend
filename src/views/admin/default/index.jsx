@@ -60,11 +60,11 @@ const Dashboard = () => {
             whatsapp: item.whatsapp,
           };
         });
-        entry = response.data.customers.reduce(
+        entry = response.data.allCustomers.reduce(
           (s, i) => (s += Number(i.planId.value['$numberDecimal'])),
           0,
         );
-        expense = response.data.customers.reduce(
+        expense = response.data.allCustomers.reduce(
           (s, i) => (s += Number(i.serviceId.cost['$numberDecimal'])),
           0,
         );

@@ -61,7 +61,8 @@ const Widget = ({ icon, status, handlerUpdateStatus }) => {
           {qrCodeImage ? (
             <div>
               <p className="font-dm text-sm font-medium text-gray-600">
-                Escanei o QR-Code para ativar sua sessão
+                Escanei o QR-Code para ativar sua sessão (Aguarde até o fim da
+                sincronização)
               </p>
               <img
                 src={qrCodeImage}

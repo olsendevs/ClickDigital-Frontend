@@ -2,6 +2,7 @@ import api from 'api/api';
 import { useEffect, useState } from 'react';
 import CheckTable from './components/CheckTable';
 import dayjs from 'dayjs';
+import './css/darkmode.css';
 const CustomersCrud = () => {
   const [tableData, setTableData] = useState([]);
   const [totalPages, setTotalPages] = useState(1);

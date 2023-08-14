@@ -418,7 +418,9 @@ const CheckTable = (props) => {
                     onChange={(e) => setCustomerService(e.target.value)}
                   >
                     {customerServiceOptions.map((option) => (
-                      <option value={option.id}>{option.name}</option>
+                      <option className="dark:bg-gray-700" value={option.id}>
+                        {option.name}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -436,7 +438,9 @@ const CheckTable = (props) => {
                     onChange={(e) => setCustomerPlan(e.target.value)}
                   >
                     {customerPlanOptions.map((option) => (
-                      <option value={option.id}>{option.name}</option>
+                      <option className="dark:bg-gray-700" value={option.id}>
+                        {option.name}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -472,7 +476,7 @@ const CheckTable = (props) => {
                     inputId={'customer.validateDate'}
                     onChange={handleValidateDateChange}
                     placeholder="Escolha a data"
-                    inputClassName="mt-2 h-12 w-full rounded-xl border p-3 text-sm outline-none"
+                    inputClassName="bg-white/0 mt-2 h-12 w-full rounded-xl border p-3 text-sm outline-none"
                     toggleClassName="absolute mt-5 ml-[-30px]"
                     asSingle={true}
                     displayFormat={'DD/MM/YYYY'}

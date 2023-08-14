@@ -8,6 +8,7 @@ import Plans from 'views/admin/plans';
 import Messages from 'views/admin/messages';
 import Customers from 'views/admin/customers';
 import ConfigMessages from 'views/admin/config_messages';
+import Financial from 'views/admin/financial';
 
 // Auth Imports
 import SignIn from 'views/auth/SignIn';
@@ -15,7 +16,9 @@ import SignIn from 'views/auth/SignIn';
 // Icon Imports
 import {
   MdAppSettingsAlt,
+  MdBarChart,
   MdEditCalendar,
+  MdGraphicEq,
   MdHome,
   MdLiveTv,
   MdLock,
@@ -31,6 +34,13 @@ const routes = [
     path: 'default',
     icon: <MdHome className="h-6 w-6" />,
     component: <MainDashboard />,
+  },
+  {
+    name: 'Financeiro Extra',
+    layout: '/admin',
+    path: 'financial',
+    icon: <MdBarChart className="h-6 w-6" />,
+    component: <Financial />,
   },
   {
     name: 'Clientes',

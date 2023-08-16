@@ -31,6 +31,7 @@ export default function Admin(props) {
         console.log(response.data);
       })
       .catch((error) => {
+        localStorage.removeItem('AUTH_TOKEN');
         window.location.href = '/';
       });
   }, []);

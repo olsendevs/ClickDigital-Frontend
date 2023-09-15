@@ -46,7 +46,7 @@ const CheckTable = (props) => {
     prepareRow,
     initialState,
   } = tableInstance;
-  initialState.pageSize = 11;
+  initialState.pageSize = 100;
 
   const openEditForm = (value) => {
     setModalTittle('Editar');
@@ -317,6 +317,9 @@ const CheckTable = (props) => {
           >
             Anterior
           </button>
+          <h2 className="p-2 px-4" id="page">
+            {currentPage}
+          </h2>
           <button
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}

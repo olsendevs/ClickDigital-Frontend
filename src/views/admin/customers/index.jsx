@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import CheckTable from './components/CheckTable';
 import dayjs from 'dayjs';
 import './css/darkmode.css';
+import Filters from './components/filters';
 const CustomersCrud = () => {
   const [tableData, setTableData] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -79,13 +80,16 @@ const CustomersCrud = () => {
       });
   };
   return (
-    <CheckTable
-      columnsData={columnsDataServices}
-      tableData={tableData}
-      totalPages={totalPages}
-      currentPage={currentPage}
-      onPageChange={(newPage) => setCurrentPage(newPage)}
-    />
+    <>
+      <Filters />
+      <CheckTable
+        columnsData={columnsDataServices}
+        tableData={tableData}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={(newPage) => setCurrentPage(newPage)}
+      />
+    </>
   );
 };
 

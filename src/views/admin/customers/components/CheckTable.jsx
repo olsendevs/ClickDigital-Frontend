@@ -13,6 +13,7 @@ import {
   MdEdit,
   MdMessage,
   MdOutlineRepeat,
+  MdSearch,
 } from 'react-icons/md';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { Modal, ModalBody, ModalContent, ModalOverlay } from '@chakra-ui/modal';
@@ -375,6 +376,22 @@ const CheckTable = (props) => {
         >
           <MdAdd />
         </button>
+        <div className="flex items-center space-x-2">
+          <MdSearch
+            className="cursor-pointer"
+            onClick={() => {
+              alert('ok');
+            }}
+          />
+          <InputField
+            placeholder="Pesquisar Ex: João Vitor"
+            id="customer.name"
+            type="text"
+            extra="w-full"
+            value={customerName}
+            onChange={(e) => setCustomerName(e.target.value)}
+          />
+        </div>
       </header>
       <Modal isOpen={isOpen} onClose={onClose} className="!z-[1010]">
         <ModalOverlay className="bg-[#000] !opacity-30" />
@@ -757,6 +774,9 @@ const CheckTable = (props) => {
           >
             Anterior
           </button>
+          <h2 className="p-2 px-4" id="page">
+            {currentPage}
+          </h2>
           <button
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}

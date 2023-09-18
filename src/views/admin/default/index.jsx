@@ -45,6 +45,13 @@ const Dashboard = () => {
     },
   ];
 
+  const addDays = (date, days) => {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+
+    return result;
+  };
+
   useEffect(() => {
     let profit = 0;
     let entry = 0;
@@ -56,7 +63,12 @@ const Dashboard = () => {
           return {
             name: item.name,
             invoice: item.invoice,
-            validateDate: new Date(item.validateDate).toLocaleDateString(),
+            validateDate: addDays(
+              new Date(item.validateDate),
+              1,
+            ).toLocaleDateString('pt-BR', {
+              timezone: 'America/Sao_Paulo',
+            }),
             whatsapp: item.whatsapp,
           };
         });

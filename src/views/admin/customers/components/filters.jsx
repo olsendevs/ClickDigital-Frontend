@@ -1,11 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Card from 'components/card';
 import api from '../../../../api/api';
 import { Button } from '@chakra-ui/react';
 
-export default function Filters() {
+export default function Filters({
+  setPlanFilter,
+  setServiceFilter,
+  setStatusFilter,
+  setBillingFilter,
+}) {
   const [customerPlanOptions, setCustomerPlanOptions] = useState([]);
   const [customerServiceOptions, setCustomerServiceOptions] = useState([]);
+
+  const planSelect = useRef();
+  const serviceSelect = useRef();
+  const statusSelect = useRef();
+  const billingSelect = useRef();
 
   useEffect(() => {
     api
@@ -32,8 +42,26 @@ export default function Filters() {
       });
   }, []);
 
-  const handleFilters = () => {};
-  const clearFilters = () => {};
+  const handleFilters = () => {
+    const planFilter = planSelect.current.value;
+    const serviceFilter = serviceSelect.current.value;
+    const statusFilter = statusSelect.current.value;
+    const billingFilter = billingSelect.current.value;
+
+    setPlanFilter(planFilter);
+    setServiceFilter(serviceFilter);
+    setStatusFilter(statusFilter);
+    setBillingFilter(billingFilter);
+  };
+
+  const clearFilters = () => {
+    planSelect.current.value = 'all';
+    serviceSelect.current.value = 'all';
+    statusSelect.current.value = 'all';
+    billingSelect.current.value = 'all';
+
+    handleFilters();
+  };
 
   return (
     <Card extra={'w-full h-full sm:overflow-auto px-6 mt-1'}>
@@ -48,8 +76,7 @@ export default function Filters() {
           <select
             id="plan"
             class=" mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none"
-            placeholder="Selecione"
-            value="Selecione"
+            ref={planSelect}
           >
             <option value="all">Todos</option>
             {customerPlanOptions.map((option) => (
@@ -69,6 +96,7 @@ export default function Filters() {
           <select
             id="service"
             class=" mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none"
+            ref={serviceSelect}
           >
             <option value="all">Todos</option>
             {customerServiceOptions.map((option) => (
@@ -88,10 +116,11 @@ export default function Filters() {
           <select
             id="status"
             class=" mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none"
+            ref={statusSelect}
           >
             <option value="all">Todos</option>
+            <option value="working">Ativo</option>
             <option value="ended">Vencido</option>
-            <option value="working">Em progresso</option>
           </select>
         </div>
         <div>
@@ -104,6 +133,7 @@ export default function Filters() {
           <select
             id="invoice"
             class=" mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none"
+            ref={billingSelect}
           >
             <option value="all">Todos</option>
             <option value="payed">Pago</option>

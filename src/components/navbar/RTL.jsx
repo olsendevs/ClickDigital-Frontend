@@ -1,16 +1,16 @@
-import React from "react";
-import Dropdown from "components/dropdown";
-import { FiAlignJustify } from "react-icons/fi";
-import { Link } from "react-router-dom";
-import navbarimage from "assets/img/layout/Navbar.png";
-import { BsArrowBarUp } from "react-icons/bs";
-import { FiSearch } from "react-icons/fi";
-import { RiMoonFill, RiSunFill } from "react-icons/ri";
+import React from 'react';
+import Dropdown from 'components/dropdown';
+import { FiAlignJustify } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import navbarimage from 'assets/img/layout/Navbar.png';
+import { BsArrowBarUp } from 'react-icons/bs';
+import { FiSearch } from 'react-icons/fi';
+import { RiMoonFill, RiSunFill } from 'react-icons/ri';
 import {
   IoMdNotificationsOutline,
   IoMdInformationCircleOutline,
-} from "react-icons/io";
-import avatar from "assets/img/avatars/avatar4.png";
+} from 'react-icons/io';
+import avatar from 'assets/img/avatars/avatar4.png';
 
 const Navbar = (props) => {
   const { onOpenSidenav, brandText } = props;
@@ -26,8 +26,8 @@ const Navbar = (props) => {
           >
             Pages
             <span className="mx-1 text-sm text-navy-700 hover:text-navy-700 dark:text-white">
-              {" "}
-              /{" "}
+              {' '}
+              /{' '}
             </span>
           </a>
           <Link
@@ -112,7 +112,9 @@ const Navbar = (props) => {
               </button>
             </div>
           }
-          classNames={"py-2 top-4 left-0 -start-[230px] md:-start-[440px] w-max"}
+          classNames={
+            'py-2 top-4 left-0 -start-[230px] md:-start-[440px] w-max'
+          }
         />
         {/* start Horizon PRO */}
         <Dropdown
@@ -126,8 +128,8 @@ const Navbar = (props) => {
               <div
                 style={{
                   backgroundImage: `url(${navbarimage})`,
-                  backgroundRepeat: "no-repeat",
-                  backgroundSize: "cover",
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: 'cover',
                 }}
                 className="mb-2 aspect-video w-full rounded-lg"
               />
@@ -154,17 +156,19 @@ const Navbar = (props) => {
               </a>
             </div>
           }
-          classNames={"py-2 top-6 left-0 -start-[250px] md:-start-[330px] w-max"}
+          classNames={
+            'py-2 top-6 left-0 -start-[250px] md:-start-[330px] w-max'
+          }
           animation="origin-[75%_0%] md:origin-top-end transition-all duration-300 ease-in-out"
         />
         <div
           className="cursor-pointer text-gray-600"
           onClick={() => {
             if (darkmode) {
-              document.body.classList.remove("dark");
+              document.body.classList.remove('dark');
               setDarkmode(false);
             } else {
-              document.body.classList.add("dark");
+              document.body.classList.add('dark');
               setDarkmode(true);
             }
           }}
@@ -190,7 +194,7 @@ const Navbar = (props) => {
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-bold text-navy-700 dark:text-white">
                     👋 Hey, Adela
-                  </p>{" "}
+                  </p>{' '}
                 </div>
               </div>
               <div className="h-px w-full bg-gray-200 dark:bg-white/20 " />
@@ -217,7 +221,7 @@ const Navbar = (props) => {
               </div>
             </div>
           }
-          classNames={"py-2 top-8 left-0 -start-[180px] w-max"}
+          classNames={'py-2 top-8 left-0 -start-[180px] w-max'}
           animation="origin-[75%_0%] md:origin-top-end transition-all duration-300 ease-in-out"
         />
       </div>

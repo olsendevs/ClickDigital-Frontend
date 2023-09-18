@@ -28,10 +28,16 @@ import dayjs from 'dayjs';
 import RenovationModal from './RenovationModal';
 import SendMessageModal from './SendMessageModal';
 
-const CheckTable = (props) => {
-  const { columnsData, tableData, totalPages, currentPage, onPageChange } =
-    props;
-
+const CheckTable = ({
+  columnsData,
+  tableData,
+  totalPages,
+  currentPage,
+  setCurrentPage,
+  onPageChange,
+  itemsPerPage,
+  setItemsPerPage,
+}) => {
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -39,6 +45,10 @@ const CheckTable = (props) => {
   const [customerWhatsApp, setCustomerWhatsApp] = useState('');
   const [customerLogin, setCustomerLogin] = useState('');
   const [customerPassword, setCustomerPassword] = useState('');
+  const [customerDevice, setCustomerDevice] = useState('');
+  const [customerMAC, setCustomerMAC] = useState('');
+  const [customerKey, setCustomerKey] = useState('');
+  const [customerApps, setCustomerApps] = useState('');
   const [customerService, setCustomerService] = useState('');
   const [customerServiceOptions, setCustomerServiceOptions] = useState([]);
   const [customerPlanOptions, setCustomerPlanOptions] = useState([]);
@@ -94,21 +104,17 @@ const CheckTable = (props) => {
     {
       columns,
       data,
+      initialState: {
+        pageSize: Number.MAX_SAFE_INTEGER,
+      },
     },
     useGlobalFilter,
     useSortBy,
     usePagination,
   );
-
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    page,
-    prepareRow,
-    initialState,
-  } = tableInstance;
-  initialState.pageSize = 11;
+  // TODO: Arrumar itens por página, mesmo mudando, só aparece 10 no máximo.
+  const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } =
+    tableInstance;
 
   const openEditForm = (value) => {
     setModalTittle('Editar');
@@ -116,6 +122,10 @@ const CheckTable = (props) => {
     setCustomerWhatsApp(value.whatsapp);
     setCustomerLogin(value.login);
     setCustomerPassword(value.password);
+    setCustomerDevice(value.device);
+    setCustomerMAC(value.mac);
+    setCustomerKey(value.key);
+    setCustomerApps(value.apps);
     setCustomerService(value.serviceId._id);
     setCustomerPlan(value.planId._id);
     setCustomerInvoice(value.invoice);
@@ -135,6 +145,10 @@ const CheckTable = (props) => {
     setCustomerWhatsApp('');
     setCustomerLogin('');
     setCustomerPassword('');
+    setCustomerDevice('');
+    setCustomerMAC('');
+    setCustomerKey('');
+    setCustomerApps('');
     setCustomerService('');
     setCustomerPlan('');
     setCustomerInvoice('payed');
@@ -178,6 +192,10 @@ const CheckTable = (props) => {
         whatsapp: customerWhatsApp,
         login: customerLogin,
         password: customerPassword,
+        device: customerDevice,
+        mac: customerMAC,
+        key: customerKey,
+        apps: customerApps,
         serviceId: document.getElementById('customer.service').value,
         planId: document.getElementById('customer.plan').value,
         invoice: customerInvoice,
@@ -244,6 +262,10 @@ const CheckTable = (props) => {
         whatsapp: customerWhatsApp,
         login: customerLogin,
         password: customerPassword,
+        device: customerDevice,
+        mac: customerMAC,
+        key: customerKey,
+        apps: customerApps,
         serviceId: document.getElementById('customer.service').value,
         planId: document.getElementById('customer.plan').value,
         invoice: customerInvoice,
@@ -365,9 +387,16 @@ const CheckTable = (props) => {
     setOpenSendMessageModal(true);
   };
 
+  const addDays = (date, days) => {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+
+    return result;
+  };
+
   return (
     <Card extra={'w-full h-full sm:overflow-auto px-6 mt-1'}>
-      <header className="relative flex items-center justify-between pt-4">
+      <header className="relative flex items-center pt-4">
         <button
           onClick={() => {
             openCreateForm();
@@ -376,13 +405,28 @@ const CheckTable = (props) => {
         >
           <MdAdd />
         </button>
-        <div className="flex items-center space-x-2">
-          <MdSearch
-            className="cursor-pointer"
-            onClick={() => {
-              alert('ok');
+        <div className="ml-4 mr-auto">
+          <select
+            id="service"
+            className=" mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none"
+            onChange={(e) => {
+              setCurrentPage(1);
+              setItemsPerPage(e.target.value);
             }}
-          />
+          >
+            <option className="dark:bg-gray-700" value={10}>
+              10 itens por página
+            </option>
+            <option className="dark:bg-gray-700" value={50}>
+              50 itens por página
+            </option>
+            <option className="dark:bg-gray-700" value={100}>
+              100 itens por página
+            </option>
+          </select>
+        </div>
+        <div className="flex flex-row items-center space-x-2">
+          <MdSearch />
           <InputField
             placeholder="Pesquisar Ex: João Vitor"
             id="customer.name"
@@ -395,7 +439,17 @@ const CheckTable = (props) => {
       </header>
       <Modal isOpen={isOpen} onClose={onClose} className="!z-[1010]">
         <ModalOverlay className="bg-[#000] !opacity-30" />
-        <ModalContent className="!z-[1002] !m-auto !w-max min-w-[700px] !max-w-[85%] md:top-[12vh]">
+        <ModalContent
+          className="!z-[1002] !w-max min-w-[700px] !max-w-[85%]"
+          containerProps={{
+            width: '100vw',
+            height: '100vh',
+            position: 'fixed',
+            display: 'grid',
+            placeContent: 'center',
+            zIndex: '5000 !important',
+          }}
+        >
           <ModalBody>
             <Card extra="px-[30px] pt-[35px] pb-[40px] max-w-[700px] flex !z-[1004]">
               <h1 className="mb-[20px] text-2xl font-bold">
@@ -437,6 +491,42 @@ const CheckTable = (props) => {
                   extra="w-full"
                   value={customerPassword}
                   onChange={(e) => setCustomerPassword(e.target.value)}
+                />
+                <InputField
+                  label="Dispositivo"
+                  placeholder="Ex: celular, computador, tv"
+                  id="customer.device"
+                  type="text"
+                  extra="w-full"
+                  value={customerDevice}
+                  onChange={(e) => setCustomerDevice(e.target.value)}
+                />
+                <InputField
+                  label="Endereço MAC"
+                  placeholder="ID do dispositivo"
+                  id="customer.mac"
+                  type="text"
+                  extra="w-full"
+                  value={customerMAC}
+                  onChange={(e) => setCustomerMAC(e.target.value)}
+                />
+                <InputField
+                  label="Key"
+                  placeholder="Chave"
+                  id="customer.key"
+                  type="text"
+                  extra="w-full"
+                  value={customerKey}
+                  onChange={(e) => setCustomerKey(e.target.value)}
+                />
+                <InputField
+                  label="Aplicativos"
+                  placeholder="Lista dos aplicativos"
+                  id="customer.apps"
+                  type="text"
+                  extra="w-full"
+                  value={customerApps}
+                  onChange={(e) => setCustomerApps(e.target.value)}
                 />
                 <div className={`w-full`}>
                   <label
@@ -694,20 +784,52 @@ const CheckTable = (props) => {
                       data = (
                         <div className="flex items-center gap-2">
                           <p className="text-sm font-bold text-navy-700 dark:text-white">
-                            {dayjs(cell.value).format('DD/MM/YYYY')}
+                            {dayjs(
+                              addDays(
+                                new Date(
+                                  new Date(cell.value).toLocaleString('en', {
+                                    timeZone: 'America/Sao_Paulo',
+                                  }),
+                                ),
+                                1,
+                              ),
+                            ).format('DD/MM/YYYY')}
                           </p>
                         </div>
                       );
                     } else if (cell.column.Header === 'Status') {
                       data = (
                         <div className="flex items-center gap-2">
-                          {dayjs(cell.value).format('DD/MM/YYYY') ===
-                          dayjs(new Date()).format('DD/MM/YYYY') ? (
+                          {dayjs(
+                            addDays(
+                              new Date(
+                                new Date(cell.value).toLocaleString('en', {
+                                  timeZone: 'America/Sao_Paulo',
+                                }),
+                              ),
+                              1,
+                            ),
+                          ).format('DD/MM/YYYY') ===
+                          dayjs(
+                            new Date(
+                              new Date().toLocaleString('en', {
+                                timeZone: 'America/Sao_Paulo',
+                              }),
+                            ),
+                          ).format('DD/MM/YYYY') ? (
                             <div className="rounded-lg bg-orange-500 px-3 py-2 text-xs font-bold uppercase text-white transition duration-200 dark:bg-orange-400">
                               Vence Hoje
                             </div>
-                          ) : new Date(cell.value).setHours(0, 0, 0, 0) <
-                            new Date().setHours(0, 0, 0, 0) ? (
+                          ) : new Date(
+                              new Date(cell.value).toLocaleString('en', {
+                                timeZone: 'America/Sao_Paulo',
+                              }),
+                            ).setHours(0, 0, 0, 0) <
+                            new Date(
+                              new Date().toLocaleString('en', {
+                                timeZone: 'America/Sao_Paulo',
+                              }),
+                            ).setHours(0, 0, 0, 0) ? (
                             <div className="rounded-lg bg-red-500 px-3 py-2 text-xs font-bold uppercase text-white transition duration-200 dark:bg-red-400">
                               Vencido
                             </div>
@@ -774,9 +896,48 @@ const CheckTable = (props) => {
           >
             Anterior
           </button>
-          <h2 className="p-2 px-4" id="page">
+          {currentPage > 2 ? (
+            <button onClick={() => setCurrentPage(1)}>
+              <h2 className="px-4 py-2 border border-solid border-gray-200">
+                1
+              </h2>
+            </button>
+          ) : (
+            <></>
+          )}
+          {currentPage > 1 ? (
+            <button onClick={() => setCurrentPage(currentPage - 1)}>
+              <h2 className="px-4 py-2 border border-solid border-gray-200">
+                {currentPage - 1}
+              </h2>
+            </button>
+          ) : (
+            <></>
+          )}
+          <h2
+            className="bg-gray-200 px-4 py-2 border border-solid border-gray-200"
+            id="page"
+          >
             {currentPage}
           </h2>
+          {currentPage + 1 <= totalPages ? (
+            <button onClick={() => setCurrentPage(currentPage + 1)}>
+              <h2 className="px-4 py-2 border border-solid border-gray-200">
+                {currentPage + 1}
+              </h2>
+            </button>
+          ) : (
+            <></>
+          )}
+          {currentPage + 2 <= totalPages ? (
+            <button onClick={() => setCurrentPage(totalPages)}>
+              <h2 className="px-4 py-2 border border-solid border-gray-200">
+                {totalPages}
+              </h2>
+            </button>
+          ) : (
+            <></>
+          )}
           <button
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}

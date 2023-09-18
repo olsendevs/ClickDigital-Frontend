@@ -56,12 +56,36 @@ const FinancialCrud = () => {
             value: parseFloat(item.value.$numberDecimal).toFixed(2),
           };
         });
+
+        const initialMoneyData = {
+          entry: 0,
+          expense: 0,
+        };
+
+        const data = result.reduce((acc, item) => {
+          if (item.type === 'Entrada') {
+            acc.entry += parseFloat(item.value);
+          } else if (item.type === 'Saida') {
+            acc.expense += parseFloat(item.value);
+          }
+
+          return acc;
+        }, initialMoneyData);
+
+        data.profit = parseFloat(data.entry - data.expense).toFixed(2);
+
+        setMoneyData({
+          profit: data.profit,
+          entry: data.entry.toFixed(2),
+          expense: data.expense.toFixed(2),
+        });
         setTableData(result);
       })
       .catch((error) => {
         console.error('Erro na requisição GET:', error);
       });
   };
+
   return (
     <div>
       <div className="mt-3 mb-5 grid grid-cols-3 gap-5 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-3">

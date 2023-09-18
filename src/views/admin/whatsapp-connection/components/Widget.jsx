@@ -8,10 +8,22 @@ const Widget = ({ icon, status, handlerUpdateStatus }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    checkWhatsapp();
+  });
+
+  useEffect(() => {
+    setInterval(checkWhatsapp, 5000);
+
+    return () => {
+      clearInterval(checkWhatsapp);
+    };
+  }, []);
+
+  const checkWhatsapp = () => {
     api
       .get('qr-code/check')
       .then((response) => {
-        if (response.data) {
+        if (Boolean(response.data)) {
           handlerUpdateStatus(true);
         } else {
           handlerUpdateStatus(false);
@@ -20,7 +32,7 @@ const Widget = ({ icon, status, handlerUpdateStatus }) => {
       .catch((error) => {
         console.error('Erro na requisição GET:', error);
       });
-  });
+  };
 
   const generateQrCode = () => {
     if (!isLoading) {
@@ -40,6 +52,17 @@ const Widget = ({ icon, status, handlerUpdateStatus }) => {
           console.error('Erro na requisição GET:', error);
         });
     }
+  };
+
+  const deleteSession = () => {
+    api
+      .delete('qr-code')
+      .then(() => {
+        handlerUpdateStatus(false);
+        setQrCodeImage('');
+        setIsLoading(false);
+      })
+      .catch((error) => console.error('Erro na requisição DELETE:', error));
   };
 
   return (
@@ -99,7 +122,10 @@ const Widget = ({ icon, status, handlerUpdateStatus }) => {
           <p className="font-dm text-sm font-medium text-gray-600">
             Sua sessão está ativa!
           </p>
-          <button className="mt-5 rounded-xl bg-red-500 px-5 py-3 text-base font-medium text-white transition duration-200 hover:bg-red-600 active:bg-red-700 dark:bg-red-400 dark:text-white dark:hover:bg-red-300 dark:active:bg-red-200">
+          <button
+            className="mt-5 rounded-xl bg-red-500 px-5 py-3 text-base font-medium text-white transition duration-200 hover:bg-red-600 active:bg-red-700 dark:bg-red-400 dark:text-white dark:hover:bg-red-300 dark:active:bg-red-200"
+            onClick={() => deleteSession()}
+          >
             Desconectar
           </button>
         </div>

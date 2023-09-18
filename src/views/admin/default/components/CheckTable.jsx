@@ -20,6 +20,9 @@ const CheckTable = (props) => {
     {
       columns,
       data,
+      initialState: {
+        pageSize: Number.MAX_SAFE_INTEGER,
+      },
     },
     useGlobalFilter,
     useSortBy,
@@ -34,7 +37,13 @@ const CheckTable = (props) => {
     prepareRow,
     initialState,
   } = tableInstance;
-  initialState.pageSize = 11;
+
+  const addDays = (date, days) => {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+
+    return result;
+  };
 
   return (
     <Card extra={'w-full h-full mt-5 sm:overflow-auto px-6'}>
@@ -103,7 +112,14 @@ const CheckTable = (props) => {
                       data = (
                         <div className="flex items-center">
                           <p className="text-sm font-bold text-navy-700 dark:text-white">
-                            {new Date(cell.value) >= new Date() ? (
+                            {addDays(
+                              new Date(
+                                new Date(cell.value).toLocaleString('en', {
+                                  timeZone: 'America/Sao_Paulo',
+                                }),
+                                1,
+                              ),
+                            ) >= new Date() ? (
                               <div className="rounded-lg bg-green-500 px-2 py-1 text-xs font-bold uppercase text-white transition duration-200 dark:bg-green-400">
                                 {cell.value}
                               </div>

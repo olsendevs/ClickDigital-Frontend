@@ -2,8 +2,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const axiosInstance = axios.create({
-  //baseURL: 'https://nest.ckdigital.xyz',
-  baseURL: 'http://localhost:3000',
+  baseURL: 'https://nest.ckdigital.xyz',
+  //baseURL: 'http://localhost:3000',
 });
 
 axiosInstance.interceptors.request.use(

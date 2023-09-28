@@ -50,13 +50,13 @@ const CheckTable = (props) => {
   } = tableInstance;
   initialState.pageSize = 11;
 
-  const openEditForm = (value) => {
-    setModalTittle('Editar');
-    setPlanValue(value.value);
-    setPlanName(value.name);
-    setPlanId(value.id);
-    onOpen();
-  };
+  // const openEditForm = (value) => {
+  //   setModalTittle('Editar');
+  //   setPlanValue(value.value);
+  //   setPlanName(value.name);
+  //   setPlanId(value.id);
+  //   onOpen();
+  // };
 
   const submitForm = () => {
     setIsLoading(true);
@@ -218,7 +218,7 @@ const CheckTable = (props) => {
                 </button>
                 <button
                   onClick={() =>
-                    modalTitle === 'Adicionar' ? submitForm() : editFinancial()
+                    modalTitle === 'Adicionar' ? submitForm() : ''
                   }
                   className="linear rounded-xl bg-brand-500 px-5 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-700 active:bg-brand-300 dark:bg-white/10 dark:text-white dark:hover:bg-white/20 dark:active:bg-white/30"
                 >
